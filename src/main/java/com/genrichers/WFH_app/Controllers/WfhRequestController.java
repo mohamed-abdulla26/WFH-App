@@ -224,15 +224,12 @@ public class WfhRequestController {
     }
 
 //   //get all requests using filter
-    @GetMapping(value="/api/manager/get_employee/{id}")
+    @GetMapping(value="/api/admin/get_employee/{id}")
     public ResponseEntity<AllWfhResultBean>findByWfhDateBetween(@PathVariable Integer id,@RequestParam LocalDate start_date,@RequestParam LocalDate end_date){
 
+        EmployeeEntity empData=EmployeeService.getSingleEmployee(id);
 
-            if(id!=2&&id!=1){
-                AllWfhResultBean bean= AllWfhResultBean.builder().message("manager or admin only can access").status(HttpStatus.NOT_FOUND.value()).build();
-                return new ResponseEntity<>(bean,HttpStatus.NOT_FOUND);
-            }else{
-
+            if(empData.getRole().equals("admin")){
                 if (start_date.isAfter(end_date)) {
                     AllWfhResultBean bean= AllWfhResultBean.builder().message("Start date must be before end date.").status(HttpStatus.NOT_FOUND.value()).build();
                     return new ResponseEntity<>(bean,HttpStatus.NOT_FOUND);
@@ -247,6 +244,10 @@ public class WfhRequestController {
                         return new ResponseEntity<>(bean,HttpStatus.OK);
                     }
                 }
+            }else{
+                AllWfhResultBean bean= AllWfhResultBean.builder().message("admin only can access").status(HttpStatus.NOT_FOUND.value()).build();
+                return new ResponseEntity<>(bean,HttpStatus.NOT_FOUND);
+
 
 
 
