@@ -206,7 +206,7 @@ public class WfhRequestController {
         //extra feature added that admin also can approve or reject the request
         if(empData.getRole().equals("manager")||empData.getRole().equals("admin")){
             WfhRequestEntity result=WfhRequestService.approveWfhRequest(wfh_id);
-            if(result.getMng_id().equals(mng_id)||mng_id==1){
+            if(result.getMng_id().equals(mng_id)||empData.getRole().equals("admin")){
                 result.setStatus(request.getStatus());
                 WfhRequestRepo.save(result);
                 WfhResultBean bean= WfhResultBean.builder().status(HttpStatus.OK.value()).WfhRequest(result).message("status updated successfully").build();
