@@ -225,7 +225,7 @@ public class WfhRequestController {
 
 //   //get all requests using filter for admin
     @GetMapping(value="/api/admin/get_employee/{id}")
-    public ResponseEntity<AllWfhResultBean>findByWfhDateBetween(@PathVariable Integer id,@RequestParam LocalDate start_date,@RequestParam LocalDate end_date){
+    public ResponseEntity<AllWfhResultBean>findByWfhDateBetweenAdmin(@PathVariable Integer id,@RequestParam LocalDate start_date,@RequestParam LocalDate end_date){
 
         EmployeeEntity empData=EmployeeService.getSingleEmployee(id);
 
@@ -256,5 +256,47 @@ public class WfhRequestController {
             }
 
     }
+
+
+
+
+
+
+
+    //   //get all requests using filter for manager
+    @GetMapping(value="/api/manager/get_employee/{id}")
+    public ResponseEntity<AllWfhResultBean>findByWfhDateBetweenForManager(@PathVariable Integer id,@RequestParam LocalDate start_date,@RequestParam LocalDate end_date){
+
+        EmployeeEntity empData=EmployeeService.getSingleEmployee(id);
+
+        if(empData.getRole().equals("manager")){
+            if (start_date.isAfter(end_date)) {
+                AllWfhResultBean bean= AllWfhResultBean.builder().message("Start date must be before end date.").status(HttpStatus.NOT_FOUND.value()).build();
+                return new ResponseEntity<>(bean,HttpStatus.NOT_FOUND);
+            }
+            else{
+                List<WfhRequestEntity>result=WfhRequestService.findByWfhDateBetween(start_date,end_date);
+                if(result.isEmpty()){
+                    AllWfhResultBean bean= AllWfhResultBean.builder().message("no data found on this period").status(HttpStatus.NOT_FOUND.value()).build();
+                    return new ResponseEntity<>(bean,HttpStatus.NOT_FOUND);
+                }else{
+                    List<WfhRequestEntity> dataStream=result.stream().filter(n->n.getMng_id().equals(empData.getEmp_id())).toList();
+                    AllWfhResultBean bean= AllWfhResultBean.builder().requests(dataStream).count(dataStream.size()).message("got all data").status(HttpStatus.OK.value()).build();
+                    return new ResponseEntity<>(bean,HttpStatus.OK);
+                }
+            }
+        }else{
+            AllWfhResultBean bean= AllWfhResultBean.builder().message("manager only can access").status(HttpStatus.NOT_FOUND.value()).build();
+            return new ResponseEntity<>(bean,HttpStatus.NOT_FOUND);
+
+
+
+
+
+
+        }
+
+    }
+
 
 }
