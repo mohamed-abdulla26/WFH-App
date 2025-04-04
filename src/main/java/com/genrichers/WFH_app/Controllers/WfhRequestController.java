@@ -197,7 +197,7 @@ public class WfhRequestController {
 
 
 
-    //request approve or reject api for manager only
+    //request approve or reject api for manager only(for admin-in case)
 
     @PutMapping(value="/api/manager/response/{mng_id}/{wfh_id}")
     public ResponseEntity<WfhResultBean>approveWfhRequest(@RequestBody WfhRequestEntity request,@PathVariable Integer wfh_id,@PathVariable Integer mng_id){
@@ -223,7 +223,7 @@ public class WfhRequestController {
 
     }
 
-//   //get all requests using filter
+//   //get all requests using filter for admin
     @GetMapping(value="/api/admin/get_employee/{id}")
     public ResponseEntity<AllWfhResultBean>findByWfhDateBetween(@PathVariable Integer id,@RequestParam LocalDate start_date,@RequestParam LocalDate end_date){
 
