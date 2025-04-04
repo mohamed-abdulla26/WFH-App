@@ -35,7 +35,7 @@ public class WfhRequestController {
 
         //checking that the given id is existing user's id
        EmployeeEntity EmployeeData=EmployeeService.getSingleEmployee(id);
-       if(EmployeeData.getEmp_id().equals(id)&&id!=1){
+       if(!EmployeeData.getRole().equals("admin")){
 
  //checking the given date that's not in past
            LocalDate today=LocalDate.now();
@@ -80,7 +80,7 @@ public class WfhRequestController {
 
 
        }else {
-            WfhResultBean bean= WfhResultBean.builder().status(HttpStatus.NOT_FOUND.value()).message("admin's id").build();
+            WfhResultBean bean= WfhResultBean.builder().status(HttpStatus.NOT_FOUND.value()).message("given admin's id").build();
            return new ResponseEntity<>(bean,HttpStatus.NOT_FOUND);
        }
 
@@ -88,7 +88,7 @@ public class WfhRequestController {
 
 
 
-    //get wfh requests
+    //get wfh requests(for employee)
 
     @GetMapping("/api/employee/get_wfh_request/{id}")
     public ResponseEntity<AllWfhResultBean>getWfhRequests(@PathVariable Integer id){
