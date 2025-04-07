@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 
 @RestController
@@ -133,6 +132,8 @@ public class WfhRequestController {
 
     }
 
+
+
     //get all  request (for manager only)
     @GetMapping(value = "/api/manager/get_all_request/{mng_id}")
     public ResponseEntity<AllWfhResultBean>getAllWfhResult(@PathVariable Integer mng_id){
@@ -157,6 +158,9 @@ public class WfhRequestController {
         }
 
     }
+
+
+
 
 
     //get all pending  request (for manager only)
@@ -222,6 +226,8 @@ public class WfhRequestController {
         }
 
     }
+
+
 
 //   //get all requests using filter for admin
     @GetMapping(value="/api/admin/get_employee/{id}")
